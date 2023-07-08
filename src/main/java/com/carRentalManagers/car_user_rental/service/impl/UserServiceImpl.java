@@ -35,10 +35,10 @@ public class UserServiceImpl implements UserService {
             return userConverter.toError("User with the same email already exists");
         }
 
-        User user = userConverter.toUser(request);
+        User user = userConverter.createUser(request);
         User savedUser = userRepository.save(user);
 
-        return userConverter.toResponseUser(savedUser);
+        return userConverter.toUserResponse(savedUser);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
         user.setEmail(user.getEmail());
 
         User savedUser = userRepository.save(user);
-        return userConverter.toResponseUser(savedUser);
+        return userConverter.toUserResponse(savedUser);
     }
 
 
@@ -65,14 +65,14 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findById(id).orElseThrow(()->
                 new RuntimeException("User with ID " + id + " not found."));
-        return userConverter.toResponseUser(user);
+        return userConverter.toUserResponse(user);
     }
 
     @Override
     public UserResponse findUserByEmail(String email) {
 
         User user = userRepository.findByEmail(email).orElseThrow(()-> new UserNotFoundException("User not found"));
-        return userConverter.toResponseUser(user);
+        return userConverter.toUserResponse(user);
     }
 
     @Override
@@ -91,6 +91,6 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id).orElseThrow(()-> new UserNotFoundException("User not found"));
         user.setPassword(passUpdate.getPassword());
         User savedUser = userRepository.save(user);
-        return userConverter.toResponseUser(savedUser);
+        return userConverter.toUserResponse(savedUser);
     }
 }
